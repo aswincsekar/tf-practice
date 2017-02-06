@@ -59,7 +59,7 @@ def do_eval(sess, data_set, images_placeholder, labels_placeholder, eval_correct
     :return:
     """
     true_count = 0  # count of correct predictions
-    steps_per_epoch = data_set.num_examples / batch_size
+    steps_per_epoch = data_set.num_examples // batch_size
     no_of_examples = steps_per_epoch * batch_size
     for i in range(steps_per_epoch):
         feed_dict = data_feed(data_set, batch_size, images_placeholder, labels_placeholder, keep_prob, 1)
