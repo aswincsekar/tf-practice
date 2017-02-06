@@ -97,25 +97,25 @@ def do_training():
     # run init
     sess.run(init)
 
-    feed_dict = data_feed(data_set.train, batch_size, images_placeholder, labels_placeholder, keep_prob, 0.5)
-    output = sess.run([logits], feed_dict=feed_dict)
+    # feed_dict = data_feed(data_set.train, batch_size, images_placeholder, labels_placeholder, keep_prob, 0.5)
+    # output = sess.run([logits], feed_dict=feed_dict)
 
     # training operation for max_steps iteration
-    # for i in range(max_steps):
-    #     feed_dict = data_feed(data_set.train, batch_size, images_placeholder, labels_placeholder, keep_prob, 0.5)
-    #     _, loss_value= sess.run([train_step,loss], feed_dict=feed_dict)
-    #     if i % 100 == 0:
-    #         print("step : %d, loss : %g" % (i, loss_value))
+    for i in range(max_steps):
+        feed_dict = data_feed(data_set.train, batch_size, images_placeholder, labels_placeholder, keep_prob, 0.5)
+        _, loss_value= sess.run([train_step,loss], feed_dict=feed_dict)
+        if i % 100 == 0:
+            print("step : %d, loss : %g" % (i, loss_value))
 
-    # # validation evaluation
-    # print("Validation Eval: ")
-    # do_eval(sess=sess, data_set=data_set.validation, images_placeholder=images_placeholder,
-    #         labels_placeholder=labels_placeholder, eval_correct=evaluation, batch_size=batch_size)
-    #
-    # # test evaluation
-    # print("Test Eval: ")
-    # do_eval(sess=sess, data_set=data_set.test, images_placeholder=images_placeholder,
-    #         labels_placeholder=labels_placeholder, eval_correct=evaluation, batch_size=batch_size)
+    # validation evaluation
+    print("Validation Eval: ")
+    do_eval(sess=sess, data_set=data_set.validation, images_placeholder=images_placeholder,
+            labels_placeholder=labels_placeholder, eval_correct=evaluation, batch_size=batch_size)
+
+    # test evaluation
+    print("Test Eval: ")
+    do_eval(sess=sess, data_set=data_set.test, images_placeholder=images_placeholder,
+            labels_placeholder=labels_placeholder, eval_correct=evaluation, batch_size=batch_size)
 
 
 # main
