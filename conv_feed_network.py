@@ -60,6 +60,7 @@ def do_eval(sess, data_set, images_placeholder, labels_placeholder, eval_correct
     no_of_examples = steps_per_epoch * batch_size
     for i in range(steps_per_epoch):
         feed_dict = data_feed(data_set,batch_size, images_placeholder, labels_placeholder)
+        feed_dict['keep_prob'] = 1
         true_count += sess.run(eval_correct, feed_dict=feed_dict)
     precision = float(true_count) / no_of_examples
     print("Num examples: %d, True count: %d, precision: %f"%(no_of_examples, true_count, precision))
@@ -103,8 +104,6 @@ def do_training():
         feed_dict['keep_prob'] = 0.5
         _, loss_value = sess.run([train_step, loss], feed_dict=feed_dict)
         if i % 100 == 0:
-            # feed_dict['keep_prob'] = 1
-            # train_accuracy = sess.run(evaluation, feed_dict=feed_dict)
             print("step : %d, loss : %g" % (i, loss_value))
 
     # validation evaluation
