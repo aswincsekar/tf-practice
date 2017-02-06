@@ -73,8 +73,8 @@ def do_training():
     :param batch_size: The batch size
     :return:
     """
-    max_steps = FLAGS['max_steps']
-    batch_size = FLAGS['batch_size']
+    max_steps = FLAGS[0].max_steps
+    batch_size = FLAGS[0].batch_size
     data_set = input_data.read_data_sets("MNIST_data/", one_hot=True)
 
     # define the placeholder variables
