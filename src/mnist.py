@@ -115,7 +115,7 @@ def training(loss):
 def evaluation(logits, labels):
     # evaluation
     correct_prediction = tf.equal(tf.argmax(logits,1), tf.argmax(labels,1))
-    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+    accuracy = tf.reduce_sum(tf.cast(correct_prediction, tf.float32))
     return accuracy
 
 

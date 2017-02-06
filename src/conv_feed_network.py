@@ -62,8 +62,8 @@ def do_eval(sess, data_set, images_placeholder, labels_placeholder, eval_correct
     steps_per_epoch = data_set.num_examples // FLAGS[0].batch_size
     no_of_examples = steps_per_epoch * FLAGS[0].batch_size
     for i in range(steps_per_epoch):
-        feed_dict = data_feed(data_set, FLAGS[0].batch_size, images_placeholder, labels_placeholder, keep_prob, 1)
-        true_count += sess.run(eval_correct, feed_dict=feed_dict)
+        feed_dict = data_feed(data_set, FLAGS[0].batch_size, images_placeholder, labels_placeholder, keep_prob, 1.0)
+        true_count += sess.run(eval_correct, feed_dict)
     precision = float(true_count) / no_of_examples
     print("Num examples: %d, True count: %d, precision: %f" % (no_of_examples, true_count, precision))
 
