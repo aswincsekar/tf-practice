@@ -44,7 +44,7 @@ def data_feed(data_set, batch_size, images_placeholder, labels_placeholder, keep
 
 
 # function for evaluation
-def do_eval(sess, data_set, images_placeholder, labels_placeholder, eval_correct, batch_size):
+def do_eval(sess, data_set, images_placeholder, labels_placeholder, eval_correct, batch_size, keep_prob):
     """
     Run one evalutation on one full epoch of data
     :param data_set:
@@ -55,11 +55,10 @@ def do_eval(sess, data_set, images_placeholder, labels_placeholder, eval_correct
     :return:
     """
     true_count = 0  # count of correct predictions
-    steps_per_epoch = data_set.num_example / batch_size
+    steps_per_epoch = data_set.num_examples / batch_size
     no_of_examples = steps_per_epoch * batch_size
     for i in range(steps_per_epoch):
-        feed_dict = data_feed(data_set,batch_size, images_placeholder, labels_placeholder)
-        feed_dict['keep_prob'] = 1
+        feed_dict = data_feed(data_set,batch_size, images_placeholder, labels_placeholder, keep_prob, 1)
         true_count += sess.run(eval_correct, feed_dict=feed_dict)
     precision = float(true_count) / no_of_examples
     print("Num examples: %d, True count: %d, precision: %f"%(no_of_examples, true_count, precision))
