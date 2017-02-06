@@ -101,9 +101,11 @@ def do_training():
     # training operation for max_steps iteration
     for i in range(max_steps):
         feed_dict = data_feed(data_set.train, batch_size, images_placeholder, labels_placeholder, keep_prob, 0.5)
-        _, loss_value = sess.run([train_step, loss], feed_dict)
+        sess.run([train_step, loss], feed_dict)
         if i % 100 == 0:
-            print("step : %d, loss : %g" % (i, loss_value))
+            feed_dict[keep_prob] = 1.0
+            train_accuracy = sess.run(evaluation, feed_dict)
+            print("step %d, training accuracy %g" % (i, train_accuracy))
 
     # validation evaluation
     print("Validation Eval: ")
