@@ -104,7 +104,7 @@ def do_training():
         sess.run([train_step, loss], feed_dict)
         if i % 100 == 0:
             feed_dict[keep_prob] = 1.0
-            train_accuracy = sess.run(evaluation, feed_dict)
+            train_accuracy = sess.run(evaluation, feed_dict) / FLAGS[0].batch_size
             print("step %d, training accuracy %g" % (i, train_accuracy))
 
     # validation evaluation
