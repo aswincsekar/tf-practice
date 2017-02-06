@@ -101,7 +101,7 @@ def inference(images, keep_prob):
 def loss(logits, labels):
     # Loss function
     # define the loss function
-    cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(logits=logits, labels=labels)
+    cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=labels)
     return tf.reduce_mean(cross_entropy)
 
 
