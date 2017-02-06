@@ -125,4 +125,4 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--max_steps', type=int, default=10000, help='Max number of iterations')
 
     FLAGS = parser.parse_known_args()
-
+    do_training()
