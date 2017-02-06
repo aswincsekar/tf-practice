@@ -46,7 +46,7 @@ def data_feed(data_set, batch_size, images_placeholder, labels_placeholder, keep
 
 
 # function for evaluation
-def do_eval(sess, data_set, images_placeholder, labels_placeholder, eval_correct, batch_size, keep_prob):
+def do_eval(sess, data_set, images_placeholder, labels_placeholder, eval_correct, keep_prob):
     """
     Run one evalutation on one full epoch of data
     :param sess:
@@ -59,10 +59,10 @@ def do_eval(sess, data_set, images_placeholder, labels_placeholder, eval_correct
     :return:
     """
     true_count = 0  # count of correct predictions
-    steps_per_epoch = data_set.num_examples // batch_size
-    no_of_examples = steps_per_epoch * batch_size
+    steps_per_epoch = data_set.num_examples // FLAGS[0].batch_size
+    no_of_examples = steps_per_epoch * FLAGS[0].batch_size
     for i in range(steps_per_epoch):
-        feed_dict = data_feed(data_set, batch_size, images_placeholder, labels_placeholder, keep_prob, 1)
+        feed_dict = data_feed(data_set, FLAGS[0].batch_size, images_placeholder, labels_placeholder, keep_prob, 1)
         true_count += sess.run(eval_correct, feed_dict=feed_dict)
     precision = float(true_count) / no_of_examples
     print("Num examples: %d, True count: %d, precision: %f" % (no_of_examples, true_count, precision))
@@ -98,25 +98,23 @@ def do_training():
     # run init
     sess.run(init)
 
-    # feed_dict = data_feed(data_set.train, batch_size, images_placeholder, labels_placeholder, keep_prob, 0.5)
-    # output = sess.run([logits], feed_dict=feed_dict)
-
     # training operation for max_steps iteration
     for i in range(max_steps):
         feed_dict = data_feed(data_set.train, batch_size, images_placeholder, labels_placeholder, keep_prob, 0.5)
         _, loss_value = sess.run([train_step, loss], feed_dict=feed_dict)
         if i % 100 == 0:
+
             print("step : %d, loss : %g" % (i, loss_value))
 
     # validation evaluation
     print("Validation Eval: ")
     do_eval(sess=sess, data_set=data_set.validation, images_placeholder=images_placeholder,
-            labels_placeholder=labels_placeholder, eval_correct=evaluation, batch_size=batch_size, keep_prob=keep_prob)
+            labels_placeholder=labels_placeholder, eval_correct=evaluation, keep_prob=keep_prob)
 
     # test evaluation
     print("Test Eval: ")
     do_eval(sess=sess, data_set=data_set.test, images_placeholder=images_placeholder,
-            labels_placeholder=labels_placeholder, eval_correct=evaluation, batch_size=batch_size, keep_prob=keep_prob)
+            labels_placeholder=labels_placeholder, eval_correct=evaluation, keep_prob=keep_prob)
 
 
 # main
