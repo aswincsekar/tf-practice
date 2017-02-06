@@ -7,6 +7,7 @@ from . import mnist
 # External flags
 FLAGS = None
 
+
 # function to set the placeholders
 def get_placeholders(batch_size):
     """
@@ -28,6 +29,7 @@ def data_feed(data_set, batch_size, images_placeholder, labels_placeholder, keep
     """
     Generate a feed_dict object which can be used to get batch wise data during training
     :param data_set: data_set is a generator object which will give us dat based on the batch size
+    :param batch_size:
     :param images_placeholder: images placeholder which will be initialed to the data taken from data_set
     :param labels_placeholder: labels placeholder which will be initialized with the ground truth from data_set
     :param keep_prob: placeholder variable for probability for dropout layer
@@ -47,29 +49,29 @@ def data_feed(data_set, batch_size, images_placeholder, labels_placeholder, keep
 def do_eval(sess, data_set, images_placeholder, labels_placeholder, eval_correct, batch_size, keep_prob):
     """
     Run one evalutation on one full epoch of data
+    :param sess:
     :param data_set:
     :param images_placeholder:
     :param labels_placeholder:
     :param eval_correct:
     :param batch_size:
+    :param keep_prob:
     :return:
     """
     true_count = 0  # count of correct predictions
     steps_per_epoch = data_set.num_examples / batch_size
     no_of_examples = steps_per_epoch * batch_size
     for i in range(steps_per_epoch):
-        feed_dict = data_feed(data_set,batch_size, images_placeholder, labels_placeholder, keep_prob, 1)
+        feed_dict = data_feed(data_set, batch_size, images_placeholder, labels_placeholder, keep_prob, 1)
         true_count += sess.run(eval_correct, feed_dict=feed_dict)
     precision = float(true_count) / no_of_examples
-    print("Num examples: %d, True count: %d, precision: %f"%(no_of_examples, true_count, precision))
+    print("Num examples: %d, True count: %d, precision: %f" % (no_of_examples, true_count, precision))
 
 
 # function to run training
 def do_training():
     """
     Train MNIST for max_steps number of iterations
-    :param max_steps: number of training iteration
-    :param batch_size: The batch size
     :return:
     """
     max_steps = FLAGS[0].max_steps
@@ -102,19 +104,19 @@ def do_training():
     # training operation for max_steps iteration
     for i in range(max_steps):
         feed_dict = data_feed(data_set.train, batch_size, images_placeholder, labels_placeholder, keep_prob, 0.5)
-        _, loss_value= sess.run([train_step,loss], feed_dict=feed_dict)
+        _, loss_value = sess.run([train_step, loss], feed_dict=feed_dict)
         if i % 100 == 0:
             print("step : %d, loss : %g" % (i, loss_value))
 
     # validation evaluation
     print("Validation Eval: ")
     do_eval(sess=sess, data_set=data_set.validation, images_placeholder=images_placeholder,
-            labels_placeholder=labels_placeholder, eval_correct=evaluation, batch_size=batch_size)
+            labels_placeholder=labels_placeholder, eval_correct=evaluation, batch_size=batch_size, keep_prob=keep_prob)
 
     # test evaluation
     print("Test Eval: ")
     do_eval(sess=sess, data_set=data_set.test, images_placeholder=images_placeholder,
-            labels_placeholder=labels_placeholder, eval_correct=evaluation, batch_size=batch_size)
+            labels_placeholder=labels_placeholder, eval_correct=evaluation, batch_size=batch_size, keep_prob=keep_prob)
 
 
 # main
