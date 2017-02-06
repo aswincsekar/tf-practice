@@ -27,7 +27,7 @@ def weight_variable(shape):
     :return: tf.Variable
     """
     initial = tf.truncated_normal(shape, stddev=0.1)
-    return tf.Variable(initial_value=initial)
+    return tf.get_variable(name='weights',initial_value=initial)
 
 
 def bias_variable(shape):
@@ -38,7 +38,7 @@ def bias_variable(shape):
     :return: tf.Variable
     """
     initial = tf.constant(value=0.1, shape=shape)
-    return tf.Variable(initial_value=initial)
+    return tf.get_variable(name='biases',initial_value=initial)
 
 
 # Convolutions and Pooling
