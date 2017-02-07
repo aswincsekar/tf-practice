@@ -26,8 +26,7 @@ def weight_variable(shape):
     :param shape:
     :return: tf.Variable
     """
-    initial = tf.truncated_normal(shape, stddev=0.1)
-    return tf.get_variable(name='weights',initial_value=initial)
+    return tf.get_variable(name='weights',shape=shape, initializer=tf.truncated_normal_initializer(0.0,0.1))
 
 
 def bias_variable(shape):
@@ -38,7 +37,7 @@ def bias_variable(shape):
     :return: tf.Variable
     """
     initial = tf.constant(value=0.1, shape=shape)
-    return tf.get_variable(name='biases',initial_value=initial)
+    return tf.get_variable(name='biases',shape=shape, initializer=tf.truncated_normal_initializer(0.0,0.1))
 
 
 # Convolutions and Pooling
@@ -56,7 +55,7 @@ def inference(images, keep_prob):
 
     # layer 1
     # variable def
-    with tf.name_scope('hidden1'):
+    with tf.variable_scope('hidden1'):
         w_conv1 = weight_variable([5,5,1,32])
         b_conv1 = bias_variable([32])
 
@@ -66,7 +65,7 @@ def inference(images, keep_prob):
 
     # layer 2
     # variable def
-    with tf.name_scope('hidden2'):
+    with tf.variable_scope('hidden2'):
         w_conv2 = weight_variable([5,5,32,64])
         b_conv2 = bias_variable([64])
 
@@ -76,7 +75,7 @@ def inference(images, keep_prob):
 
     # densely connected layer
     # variable def
-    with tf.name_scope('dc1'):
+    with tf.variable_scope('dc1'):
         w_conv3 = weight_variable([7*7*64, 1024])
         b_conv3 = bias_variable([1024])
 
@@ -87,11 +86,11 @@ def inference(images, keep_prob):
         o_conv3 = tf.nn.relu(tf.matmul(o_inp3, w_conv3) + b_conv3)
 
     # dropout layer
-    with tf.name_scope('dropout'):
+    with tf.variable_scope('dropout'):
         o_dc1_drop = tf.nn.dropout(o_conv3, keep_prob=keep_prob)
 
     # readout layer
-    with tf.name_scope('readout'):
+    with tf.variable_scope('readout'):
         w_readout = weight_variable([1024,10])
         b_readout = bias_variable([10])
         logits = tf.matmul(o_dc1_drop, w_readout) + b_readout
