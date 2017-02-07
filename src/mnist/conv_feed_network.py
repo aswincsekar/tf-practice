@@ -113,7 +113,7 @@ def do_training():
             train_accuracy = sess.run(evaluation, feed_dict) / FLAGS[0].batch_size
             print("step %d, training accuracy %g" % (i, train_accuracy))
         if (i+1) % 5000 == 0 or (i+1) == FLAGS[0].max_steps:
-            saver.save(sess, os.path.join(base_path,"models/mnist.ckpt"), global_step=i)
+            saver.save(sess, os.path.join(FLAGS[0].log_dir,"mnist.ckpt"), global_step=i)
 
 
     # validation evaluation
@@ -128,9 +128,12 @@ def do_training():
 # main
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-b', '--batch_size', type=int, default=100, help="Batch Size")
-    parser.add_argument('-s', '--max_steps', type=int, default=10000, help='Max number of iterations')
+    parser.add_argument('-b', '--batch_size', type=int, default=100,
+                        help="Batch Size")
+    parser.add_argument('-s', '--max_steps', type=int, default=10000,
+                        help='Max number of iterations')
+    parser.add_argument('-l', '--log_dir', type=str, default='/tmp/tensorflow/mnist/logs/conv_feed_network/',
+                        help='Directory to put log data')
 
     FLAGS = parser.parse_known_args()
-    base_path = os.path.dirname(os.path.dirname(__file__))
     do_training()
