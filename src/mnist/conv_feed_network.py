@@ -2,10 +2,13 @@
 import tensorflow as tf
 import argparse
 from tensorflow.examples.tutorials.mnist import input_data
-from src import mnist
+from src.mnist import mnist
+import os
 
 # External flags
 FLAGS = None
+
+base_path = None
 
 
 # function to set the placeholders
@@ -95,6 +98,9 @@ def do_training():
     # start a session
     sess = tf.Session()
 
+    # create a saver object
+    saver = tf.train.Saver(max_to_keep=10)
+
     # run init
     sess.run(init)
 
@@ -106,6 +112,9 @@ def do_training():
             feed_dict[keep_prob] = 1.0
             train_accuracy = sess.run(evaluation, feed_dict) / FLAGS[0].batch_size
             print("step %d, training accuracy %g" % (i, train_accuracy))
+        if (i+1) % 5000 == 0 or (i+1) == FLAGS[0].max_steps:
+            saver.save(sess, os.path.join(base_path,"models/mnist.ckpt"), global_step=i)
+
 
     # validation evaluation
     print("Validation Eval: ")
@@ -123,4 +132,5 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--max_steps', type=int, default=10000, help='Max number of iterations')
 
     FLAGS = parser.parse_known_args()
+    base_path = os.path.dirname(os.path.dirname(__file__))
     do_training()
