@@ -113,7 +113,11 @@ def do_training():
             train_accuracy = sess.run(evaluation, feed_dict) / FLAGS[0].batch_size
             print("step %d, training accuracy %g" % (i, train_accuracy))
         if (i+1) % 5000 == 0 or (i+1) == FLAGS[0].max_steps:
-            saver.save(sess, os.path.join(FLAGS[0].log_dir,"mnist.ckpt"), global_step=i)
+            try:
+                saver.save(sess, os.path.join(FLAGS[0].log_dir,"mnist.ckpt"), global_step=i)
+            except ValueError:
+                os.mkdir(FLAGS[0].log_dir)
+                saver.save(sess, os.path.join(FLAGS[0].log_dir, "mnist.ckpt"), global_step=i)
 
 
     # validation evaluation
