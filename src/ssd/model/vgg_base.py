@@ -14,11 +14,17 @@ class Vgg16:
     def __init__(self, vgg16_npy_path=None):
         if vgg16_npy_path is None:
             path = inspect.getfile(Vgg16)
+            print(path)
             path = os.path.abspath(os.path.join(path, os.pardir))
+            path = os.path.dirname(path)
+            path = os.path.join(path, 'data/vgg_pretrained_data')
             path = os.path.join(path, "vgg16.npy")
             vgg16_npy_path = path
-
-        self.data_dict = np.load(vgg16_npy_path, encoding='latin1').item()
+        try:
+            self.data_dict = np.load(vgg16_npy_path, encoding='latin1').item()
+        except FileNotFoundError:
+            print('File Not Found')
+            exit()
         print("npy file loaded")
 
     def build(self, rgb):
