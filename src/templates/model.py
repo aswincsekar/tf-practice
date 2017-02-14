@@ -36,26 +36,27 @@ def bias_variable(shape):
     :param shape:
     :return: tf.Variable
     """
-    return tf.get_variable(name='biases',shape=shape, initializer=tf.constant_initializer(0.1))
+    initial = tf.constant(value=0.1, shape=shape)
+    return tf.get_variable(name='biases',shape=shape, initializer=tf.truncated_normal_initializer(0.0,0.1))
 
 
 # Convolutions and Pooling
-def conv2d(x, W):
-    return tf.nn.conv2d(x, W, [1, 1, 1, 1], padding='SAME')
+def conv2d(x,W):
+    return tf.nn.conv2d(x,W,[1,1,1,1], padding='SAME')
 
 
 def max_pool_2x2(x):
-    return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
+    return tf.nn.max_pool(x,ksize=[1,2,2,1], strides=[1,2,2,1], padding='SAME')
 
 
 def inference(images, keep_prob):
     # reshape input image
-    x_image = tf.reshape(images, shape=[-1, 28, 28, 1])
+    x_image = tf.reshape(images, shape=[-1,28,28,1])
 
     # layer 1
     # variable def
     with tf.variable_scope('hidden1'):
-        w_conv1 = weight_variable([5, 5, 1, 32])
+        w_conv1 = weight_variable([5,5,1,32])
         b_conv1 = bias_variable([32])
 
         # operation def
